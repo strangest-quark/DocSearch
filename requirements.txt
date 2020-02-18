@@ -1,0 +1,4 @@
+PyYAML
+Flask==1.1.1
+nboost[pt]
+elasticsearch

@@ -1,0 +1,12 @@
+MYSQL:
+  USERNAME: root
+  PASSWORD: rootroot
+  DB_NAME: db
+  HOST: localhost
+  PORT: 3306
+  CSV_FILENAME: /Users/sn5/git/other/DocSearch/docSearch_ws/data/BBC_news_dataset.csv
+
+ES:
+  INDEX: bbc
+  HOST: localhost
+  PORT: 9200
