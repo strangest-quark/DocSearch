@@ -35,7 +35,10 @@ class SQLClient:
                 next(csv_data)
                 for row in csv_data:
                     print("row: "+ str(row))
-                    cursor.execute('INSERT INTO ' + table_name + '(id, content, tags) VALUES("%s", "%s", "%s")', (int(row[0]), row[1], str(row[2])))
+                    try:
+                        cursor.execute('INSERT INTO ' + table_name + '(id, content, tags) VALUES("%s", "%s", "%s")', (int(row[0]), row[1], str(row[2])))
+                    except:
+                        print("Insert for id: "+str(row[0])+" failed")
             self.mydb.commit()
             cursor.close()
             print("Csv to mysql db data insertion done")
