@@ -1,0 +1,12 @@
+MYSQL:
+  USERNAME: root
+  PASSWORD: root
+  DB_NAME: bbc
+  HOST: db
+  PORT: 3306
+  CSV_FILENAME: /app/data/BBC_news_dataset.csv
+
+ES:
+  INDEX: bbc
+  HOST: elasticsearch
+  PORT: 9200

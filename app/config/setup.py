@@ -1,6 +1,6 @@
-from docSearch_ws.client.elastic_search_client import ES_Client
-from docSearch_ws.client.sql_client import SQLClient
-from docSearch_ws.config.config import Config
+from client.elastic_search_client import ES_Client
+from client.sql_client import SQLClient
+from config.config import Config
 
 
 class Setup:
