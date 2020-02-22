@@ -1,0 +1,17 @@
+MYSQL:
+  USERNAME: root
+  PASSWORD: root
+  DB_NAME: search
+  HOST: db
+  PORT: 3306
+  CSV_FILENAME: /app/data/BBC_news_dataset.csv
+
+ES:
+  INDEX: bbc
+  HOST: elasticsearch
+  PORT: 9200
+
+S3:
+  REGION: ap-south-1
+  BUCKET: infineon-doc-search
+

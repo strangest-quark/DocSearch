@@ -1,13 +1,7 @@
-CREATE DATABASE knights;
-use knights;
+CREATE DATABASE search;
+use search;
 
-CREATE TABLE favorite_colors (
-  name VARCHAR(20),
-  color VARCHAR(10)
-);
+CREATE TABLE bbc(id INT(6) UNSIGNED PRIMARY KEY, content TEXT NOT NULL, tags TEXT NOT NULL);
+ALTER TABLE bbc MODIFY tags TEXT CHARACTER SET utf8;
 
-INSERT INTO favorite_colors
-  (name, color)
-VALUES
-  ('Lancelot', 'blue'),
-  ('Galahad', 'yellow');
+CREATE TABLE s3_connections(id INT(6) UNSIGNED NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL UNIQUE, access_key_id TEXT NOT NULL, access_key TEXT NOT NULL, bucket TEXT NOT NULL, region TEXT NOT NULL, PRIMARY KEY(id));

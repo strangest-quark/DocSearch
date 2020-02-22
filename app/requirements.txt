@@ -1,2 +1,8 @@
 Flask
 mysql-connector
+flask_cors
+elasticsearch
+PyYAML
+boto3
+pdfminer
+doc2text
