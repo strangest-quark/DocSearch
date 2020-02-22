@@ -33,6 +33,7 @@ class ConnectionHandler:
         for record in records:
             sub = dict()
             sub['name'] = record[1]
+            sub['id'] = record[0]
             sub['acess_key_id'] = record[2]
             sub["access_key"] = record[3]
             sub["bucket"] = record[4]
