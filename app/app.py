@@ -69,7 +69,8 @@ def add_connection():
 @app.route('/view_connection', methods=['GET'])
 @cross_origin()
 def view_connection():
-    j = connectionHandler.view_all_s3_connections()
+    j = dict()
+    j["res"] = connectionHandler.view_all_s3_connections()
     return jsonify(j)
 
 

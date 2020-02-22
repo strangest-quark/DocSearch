@@ -27,8 +27,7 @@ class ConnectionHandler:
             return "Connection failed"
 
     def view_all_s3_connections(self):
-        j = dict()
-        j['res'] = dict()
+        j = []
         records = self.sql_client.fetch_all_s3_connections()
         for record in records:
             sub = dict()
@@ -38,6 +37,6 @@ class ConnectionHandler:
             sub["access_key"] = record[3]
             sub["bucket"] = record[4]
             sub["region"] = record[5]
-            j['res'][record[0]] = sub
+            j.append(sub)
         return j
 
