@@ -10,8 +10,3 @@ ES:
   INDEX: bbc
   HOST: elasticsearch
   PORT: 9200
-
-S3:
-  REGION: ap-south-1
-  BUCKET: infineon-doc-search
-

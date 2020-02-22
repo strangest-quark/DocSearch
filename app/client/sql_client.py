@@ -44,6 +44,7 @@ class SQLClient:
             return "Storing this connection failed"
         return "Connection stored succesfully"
 
+
     def insert_csv_to_db(self, table_name):
             cursor = self.mydb.cursor()
             with open(self.csv_filename, newline='') as csvfile:
