@@ -6,3 +6,4 @@ PyYAML
 boto3
 pdfminer
 doc2text
+flask-cors

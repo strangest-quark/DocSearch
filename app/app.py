@@ -10,8 +10,13 @@ from config.setup import Setup
 from handlers.connections_handler import ConnectionHandler
 import json
 import argparse
+from flask_cors import CORS, cross_origin
+
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 config = None
 es_client = None
@@ -20,12 +25,14 @@ connectionHandler = None
 
 
 @app.route('/')
+@cross_origin()
 def hello_world():
     return 'DocSearch is running!'
 
 
 # /search_tag?search=history
 @app.route('/search_tag', methods=['GET'])
+@cross_origin()
 def tag_search():
     tag = request.args.get('search')
     j = dict()
@@ -34,6 +41,7 @@ def tag_search():
 
 # /search_full_text?search=history
 @app.route('/search_full_text', methods=['GET'])
+@cross_origin()
 def search_full_text():
     full_text = request.args.get('search')
     j = dict()
@@ -41,6 +49,7 @@ def search_full_text():
     return jsonify(j)
 
 @app.route('/add_connection', methods=['POST'])
+@cross_origin()
 def add_connection():
     req_body = request.get_json()
     j=dict()
@@ -58,6 +67,7 @@ def add_connection():
     return jsonify(j)
 
 @app.route('/view_connection', methods=['GET'])
+@cross_origin()
 def view_connection():
     j = connectionHandler.view_all_s3_connections()
     return jsonify(j)

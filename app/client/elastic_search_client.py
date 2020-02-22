@@ -25,13 +25,9 @@ class ES_Client:
     def full_text_search(self, query):
         res = self.es.search(index=self.index, body={"query": {"query_string": {"query": query}}})
         print("Got %d Hits:" % res['hits']['total']['value'])
-        for hit in res['hits']['hits']:
-            print("_source: " + str(hit["_source"]))
         return res['hits']['hits']
 
     def tag_search(self, tag):
         res = self.es.search(index=self.index, body={"query": {"bool": {"must": [{"term": {"tags": tag}}]}}})
         print("Got %d Hits:" % res['hits']['total']['value'])
-        for hit in res['hits']['hits']:
-            print("_source: " + str(hit["_source"]))
         return res['hits']['hits']
