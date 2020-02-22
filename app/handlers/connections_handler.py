@@ -31,12 +31,12 @@ class ConnectionHandler:
         records = self.sql_client.fetch_all_s3_connections()
         for record in records:
             sub = dict()
-            sub['name'] = record[1]
+            sub['name'] = record[1].replace("'","")
             sub['id'] = record[0]
-            sub['acess_key_id'] = record[2]
-            sub["access_key"] = record[3]
-            sub["bucket"] = record[4]
-            sub["region"] = record[5]
+            sub['acess_key_id'] = record[2].replace("'","")
+            sub["access_key"] = record[3].replace("'","")
+            sub["bucket"] = record[4].replace("'","")
+            sub["region"] = record[5].replace("'","")
             j.append(sub)
         return j
 
