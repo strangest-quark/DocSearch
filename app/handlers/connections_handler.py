@@ -9,14 +9,16 @@ class ConnectionHandler:
         self.sql_client = SQLClient(config)
 
     def add_s3_connection_to_db(self,aws_access_key_id, aws_secret_access_key, bucket, region, name):
-        self.sql_client.insert_into_s3_connections(name, aws_access_key_id, aws_secret_access_key, bucket, region)
+        return self.sql_client.insert_into_s3_connections(name, aws_access_key_id, aws_secret_access_key, bucket, region)
 
     def add_s3_connection(self, aws_access_key_id, aws_secret_access_key, bucket, region, name):
         try:
             s3_client = S3Client(aws_access_key_id, aws_secret_access_key, bucket, region)
             keys = s3_client.get_s3_keys(bucket)
             if not isinstance(keys, str) :
-                self.add_s3_connection_to_db(aws_access_key_id, aws_secret_access_key, bucket, region, name)
+                code = self.add_s3_connection_to_db(aws_access_key_id, aws_secret_access_key, bucket, region, name)
+                if code != 200:
+                    return "Aborting connection add"
                 if len(keys) > 0:
                     return keys
                 else:

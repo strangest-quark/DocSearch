@@ -42,7 +42,7 @@ class SQLClient:
             cursor.execute('INSERT INTO s3_connections(name, access_key_id, access_key, bucket, region) VALUES("%s", "%s", "%s", "%s", "%s")', (name, access_key_id, access_key, bucket, region))
         except:
             return "Storing this connection failed"
-        return "Connection stored succesfully"
+        return 200
 
 
     def insert_csv_to_db(self, table_name):

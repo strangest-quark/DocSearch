@@ -11,6 +11,7 @@ from handlers.connections_handler import ConnectionHandler
 import json
 import argparse
 from flask_cors import CORS, cross_origin
+from flask_api import status
 
 
 app = Flask(__name__)
@@ -57,21 +58,29 @@ def add_connection():
         if req_body['connection_type'] == "s3":
             try:
                 keys = connectionHandler.add_s3_connection(req_body["access_key_id"], req_body["access_key"], req_body["bucket"], req_body["region"], req_body["name"])
-                j['res'] = keys
+                res = keys
+                j["res"] = keys
+                if isinstance(res, list):
+                    return jsonify(j)
+                else:
+                    return jsonify(j), status.HTTP_400_BAD_REQUEST
             except:
                 j['res'] = "Error adding connection"
+                return jsonify(j), status.HTTP_400_BAD_REQUEST
         else:
             j['res'] = "Only s3 connections supported"
+            return jsonify(j), status.HTTP_400_BAD_REQUEST
     except:
         j['res'] = "Error adding connection"
-    return jsonify(j)
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
 
 @app.route('/view_connection', methods=['GET'])
 @cross_origin()
 def view_connection():
     j = dict()
-    j["res"] = connectionHandler.view_all_s3_connections()
+    j['res'] = connectionHandler.view_all_s3_connections()
     return jsonify(j)
+
 
 
 if __name__ == '__main__':
