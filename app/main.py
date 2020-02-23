@@ -14,8 +14,6 @@ if __name__ == '__main__':
     config_file = args.config
     config = Config(config_file)
     sql_client = SQLClient(config)
-    sql_client.insert_into_s3_connections("ikram", "AKIA4UOIW7WWLSAZCZ23", "NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa", "infineon-doc-search",
-                        "ap-south-1")
     records = sql_client.fetch_connection("ikram")
     print(records)
     #records = sql_client.fetch_all_s3_connections()
