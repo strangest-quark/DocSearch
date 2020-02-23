@@ -4,6 +4,7 @@ from flask import request
 from flask import jsonify
 import mysql.connector
 from client.elastic_search_client import ES_Client
+from client.s3_client import S3Client
 from client.sql_client import SQLClient
 from config.config import Config
 from config.setup import Setup
@@ -13,11 +14,11 @@ import argparse
 from flask_cors import CORS, cross_origin
 from flask_api import status
 
+from handlers.file_processor import S3FileProcessor
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
-
 
 config = None
 es_client = None
@@ -31,33 +32,42 @@ def hello_world():
     return 'DocSearch is running!'
 
 
-# /search_tag?search=history
-@app.route('/search_tag', methods=['GET'])
+# /search_tag
+@app.route('/search_tag', methods=['POST'])
 @cross_origin()
 def tag_search():
-    tag = request.args.get('search')
+    req_body = request.get_json()
+    tag = req_body["tag"]
+    conn = req_body["connection"].replace(" ", "").lower()
+    es_client.set_index(conn)
     j = dict()
     j['res'] = es_client.tag_search(tag)
     return jsonify(j)
 
-# /search_full_text?search=history
-@app.route('/search_full_text', methods=['GET'])
+
+# /search_full_text
+@app.route('/search_full_text', methods=['POST'])
 @cross_origin()
 def search_full_text():
-    full_text = request.args.get('search')
+    req_body = request.get_json()
+    full_text = req_body["txt"]
+    conn = req_body["connection"].replace(" ", "").lower()
+    es_client.set_index(conn)
     j = dict()
     j['res'] = es_client.full_text_search(full_text)
     return jsonify(j)
+
 
 @app.route('/add_connection', methods=['POST'])
 @cross_origin()
 def add_connection():
     req_body = request.get_json()
-    j=dict()
+    j = dict()
     try:
         if req_body['connection_type'] == "s3":
             try:
-                keys = connectionHandler.add_s3_connection(req_body["access_key_id"], req_body["access_key"], req_body["bucket"], req_body["region"], req_body["name"])
+                keys = connectionHandler.add_s3_connection(req_body["access_key_id"], req_body["access_key"],
+                                                           req_body["bucket"], req_body["region"], req_body["name"])
                 res = keys
                 j["res"] = keys
                 if isinstance(res, list):
@@ -74,6 +84,7 @@ def add_connection():
         j['res'] = "Error adding connection"
         return jsonify(j), status.HTTP_400_BAD_REQUEST
 
+
 @app.route('/view_connection', methods=['GET'])
 @cross_origin()
 def view_connection():
@@ -81,6 +92,58 @@ def view_connection():
     j['res'] = connectionHandler.view_all_s3_connections()
     return jsonify(j)
 
+
+@app.route('/process_files', methods=['POST'])
+@cross_origin()
+def process_files():
+    req_body = request.get_json()
+    connection_name = req_body["name"]
+    records = connectionHandler.get_s3_connection(connection_name)
+    s3FileProcessor = S3FileProcessor(config,
+                                      records[0][1],
+                                      records[0][2],
+                                      records[0][3],
+                                      records[0][4],
+                                      records[0][0])
+    s3FileProcessor.read_bucket()
+    j = dict()
+    j['res'] = "Processed"
+    return jsonify(j)
+
+
+@app.route('/view_file', methods=['POST'])
+@cross_origin()
+def view_file():
+    req_body = request.get_json()
+    connection_name = req_body["name"]
+    file_name = req_body["file_name"]
+    records = connectionHandler.get_s3_connection(connection_name)
+    s3Client = S3Client(records[0][1],
+                        records[0][2],
+                        records[0][3],
+                        records[0][4])
+    j = dict()
+    res = s3Client.get_presigned_url(file_name)
+    if res != 404:
+        j["res"] = res
+        return jsonify(j)
+    else:
+        j['res'] = "File not found"
+        return jsonify(j)
+
+@app.route('/view_files', methods=['POST'])
+@cross_origin()
+def view_files():
+    req_body = request.get_json()
+    connection_name = req_body["name"]
+    records = connectionHandler.get_s3_connection(connection_name)
+    j = dict()
+    res = connectionHandler.view_s3_connection(records[0][1], records[0][2], records[0][3], records[0][4])
+    if isinstance(res, list):
+        j['res']=res
+        return jsonify(j)
+    else:
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
 
 
 if __name__ == '__main__':
@@ -93,7 +156,8 @@ if __name__ == '__main__':
     es_client = ES_Client(config)
     setup = Setup(config)
     sql_client = SQLClient(config)
-    sql_client.insert_csv_to_db("bbc")
-    #sql_client.fetch_some_rows(5)
-    setup.populate_index_from_mysql()
+
+    # sql_client.insert_csv_to_db("bbc")
+    # sql_client.fetch_some_rows(5)
+    # setup.populate_index_from_mysql()
     app.run(host='0.0.0.0', port=80)

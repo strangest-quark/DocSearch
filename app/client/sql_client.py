@@ -9,6 +9,7 @@ class SQLClient:
     def __init__(self, config: Config):
         self.select_s3_rows_query = "SELECT * FROM s3_connections"
         self.select_bbc_rows_query = "SELECT * FROM bbc"
+        self.select_s3_connection_row = "SELECT * FROM s3_connections WHERE name=%s"
         db_config = {
             'user': config.mysql_username,
             'password': config.mysql_password,
@@ -36,29 +37,39 @@ class SQLClient:
         cursor.close()
         return records
 
+    def fetch_connection(self, name):
+        cursor = self.mydb.cursor()
+        print('SELECT * FROM s3_connections WHERE name="'+name+'"')
+        cursor.execute('SELECT * FROM s3_connections WHERE name="'+name+'"')
+        records = cursor.fetchall()
+        cursor.close()
+        return records
+
     def insert_into_s3_connections(self, name, access_key_id, access_key, bucket, region):
         cursor = self.mydb.cursor()
         try:
-            cursor.execute('INSERT INTO s3_connections(name, access_key_id, access_key, bucket, region) VALUES("%s", "%s", "%s", "%s", "%s")', (name, access_key_id, access_key, bucket, region))
+            query = 'INSERT INTO s3_connections(name, access_key_id, access_key, bucket, region) VALUES("'+name+'", "'+access_key_id+'", "'+access_key+'", "'+bucket+'", "'+region+'")'
+            print(query)
+            cursor.execute(query)
         except:
             return "Storing this connection failed"
         return 200
 
-
     def insert_csv_to_db(self, table_name):
-            cursor = self.mydb.cursor()
-            with open(self.csv_filename, newline='') as csvfile:
-                csv_data = csv.reader(csvfile, delimiter=",")
-                next(csv_data)
-                for row in csv_data:
-                    try:
-                        cursor.execute('INSERT INTO ' + table_name + '(id, content, tags) VALUES("%s", "%s", "%s")', (int(row[0]), row[1], str(row[2])))
-                        print("row " + str(row[0]) + " inserted")
-                    except:
-                        print("Insert for id: "+str(row[0])+" failed")
-            self.mydb.commit()
-            cursor.close()
-            print("Csv to mysql db data insertion done")
+        cursor = self.mydb.cursor()
+        with open(self.csv_filename, newline='') as csvfile:
+            csv_data = csv.reader(csvfile, delimiter=",")
+            next(csv_data)
+            for row in csv_data:
+                try:
+                    cursor.execute('INSERT INTO ' + table_name + '(id, content, tags) VALUES("%s", "%s", "%s")',
+                                   (int(row[0]), row[1], str(row[2])))
+                    print("row " + str(row[0]) + " inserted")
+                except:
+                    print("Insert for id: " + str(row[0]) + " failed")
+        self.mydb.commit()
+        cursor.close()
+        print("Csv to mysql db data insertion done")
 
     def fetch_some_rows(self, rowCount):
         cursor = self.mydb.cursor()

@@ -8,6 +8,9 @@ class ES_Client:
         self.es = Elasticsearch([config.es_host], port=config.es_port)
         self.index = config.es_index
 
+    def set_index(self, index):
+        self.index = index
+
     def index_es(self, doc_id, doc):
         res = self.es.index(index=self.index, id=doc_id, body=doc)
         print(res)

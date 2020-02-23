@@ -7,3 +7,6 @@ boto3
 pdfminer
 doc2text
 flask-cors
+Flask-API
+textract
+python-docx

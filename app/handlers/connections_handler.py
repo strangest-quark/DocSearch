@@ -28,17 +28,33 @@ class ConnectionHandler:
         except:
             return "Connection failed"
 
+    def view_s3_connection(self, aws_access_key_id, aws_secret_access_key, bucket, region):
+        try:
+            s3_client = S3Client(aws_access_key_id, aws_secret_access_key, bucket, region)
+            keys = s3_client.get_s3_keys(bucket)
+            if not isinstance(keys, str) :
+                if len(keys) > 0:
+                    return keys
+                else:
+                    return "No files in bucket"
+            else:
+                return keys
+        except:
+            return "Connection failed"
+
     def view_all_s3_connections(self):
         j = []
         records = self.sql_client.fetch_all_s3_connections()
         for record in records:
             sub = dict()
-            sub['name'] = record[1].replace("'","")
-            sub['id'] = record[0]
-            sub['acess_key_id'] = record[2].replace("'","")
-            sub["access_key"] = record[3].replace("'","")
-            sub["bucket"] = record[4].replace("'","")
-            sub["region"] = record[5].replace("'","")
+            sub['name'] = record[0].replace("'","")
+            sub['acess_key_id'] = record[1].replace("'","")
+            sub["access_key"] = record[2].replace("'","")
+            sub["bucket"] = record[3].replace("'","")
+            sub["region"] = record[4].replace("'","")
             j.append(sub)
         return j
+
+    def get_s3_connection(self, name):
+        return self.sql_client.fetch_connection(name)
 
