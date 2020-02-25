@@ -22,7 +22,8 @@ class S3FileProcessor:
         print(text)
         if text is not None:
             es_body = {
-                'content': text
+                'content': text,
+                'tags': ''
             }
             for obj in metadata[0]:
                 es_body[obj] = (metadata[0][obj]).decode("utf-8")

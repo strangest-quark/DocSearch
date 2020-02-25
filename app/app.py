@@ -57,6 +57,18 @@ def search_full_text():
     j['res'] = es_client.full_text_search(full_text)
     return jsonify(j)
 
+# /search_content_and_tag
+@app.route('/search_content_and_tag', methods=['POST'])
+@cross_origin()
+def search_content_and_tag():
+    req_body = request.get_json()
+    full_text = req_body["txt"]
+    tag = req_body["tag"]
+    conn = req_body["connection"].replace(" ", "").lower()
+    es_client.set_index(conn)
+    j = dict()
+    j['res'] = es_client.text_and_tag_search(full_text, tag)
+    return jsonify(j)
 
 @app.route('/add_connection', methods=['POST'])
 @cross_origin()
@@ -131,6 +143,7 @@ def view_file():
         j['res'] = "File not found"
         return jsonify(j)
 
+
 @app.route('/view_files', methods=['POST'])
 @cross_origin()
 def view_files():
@@ -140,9 +153,40 @@ def view_files():
     j = dict()
     res = connectionHandler.view_s3_connection(records[0][1], records[0][2], records[0][3], records[0][4])
     if isinstance(res, list):
-        j['res']=res
+        j['res'] = res
         return jsonify(j)
     else:
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
+
+
+@app.route('/add_tag', methods=['POST'])
+@cross_origin()
+def add_tag():
+    j = dict()
+    req_body = request.get_json()
+    file_key = req_body["file"]
+    tag = req_body["tag"]
+    connection_name = req_body["conn_name"]
+    try:
+        res = es_client.get_es(file_key, connection_name)
+        print(res)
+    except:
+        j["res"] = "Error in file get"
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
+    existing_tags = res["_source"]["tags"]
+    if existing_tags != "":
+        tag = ','+tag
+    body = {
+        'doc': {
+            'tags': existing_tags + tag
+        }
+    }
+    try:
+        es_client.update_es(file_key, body, connection_name)
+        j["res"] = "Tag added"
+        return jsonify(j)
+    except:
+        j["res"] = "Tag not added"
         return jsonify(j), status.HTTP_400_BAD_REQUEST
 
 
@@ -160,4 +204,4 @@ if __name__ == '__main__':
     # sql_client.insert_csv_to_db("bbc")
     # sql_client.fetch_some_rows(5)
     # setup.populate_index_from_mysql()
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80, debug=True)
