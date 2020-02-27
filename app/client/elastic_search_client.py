@@ -38,17 +38,20 @@ class ES_Client:
         return res['hits']['hits']
 
     def text_and_tag_search(self, query, tag):
-        res = self.es.search(index=self.index, body={"query": {
-            "bool": {
-                "must": [
-                    {"term": {"tags": tag}},
-                    {"term": {"content": query}}
-                ]
-            }}})
+        search = '{"query": ' \
+                 '{"bool": ' \
+                 '{ "must": ' \
+                 '[{"term": {"content": "'+query+'"}},' \
+                 '{"bool": {"should": [' \
+                 '{"term": {"tags": "'+tag+'"}},' \
+                 '{"term": {"automated_tags": "'+tag+'"}}]}}]}}}'
+        res = self.es.search(index=self.index, body=search)
         print("Got %d Hits:" % res['hits']['total']['value'])
         return res['hits']['hits']
 
     def tag_search(self, tag):
-        res = self.es.search(index=self.index, body={"query": {"bool": {"must": [{"term": {"tags": tag}}]}}})
+        search = '{"query": {"bool": {"should": [{"term": {"tags": "'+tag+'"}},{"term": {"automated_tags": "'+tag+'"}}]}}}'
+        res = self.es.search(index=self.index, body=search)
+
         print("Got %d Hits:" % res['hits']['total']['value'])
         return res['hits']['hits']

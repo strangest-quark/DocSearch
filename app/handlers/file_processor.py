@@ -35,7 +35,8 @@ class S3FileProcessor:
         if text is not None:
             es_body = {
                 'content': text,
-                'tags': self.get_tag_string(text)
+                'automated_tags': self.get_tag_string(text),
+                'tags': ''
             }
             for obj in metadata[0]:
                 es_body[obj] = (metadata[0][obj]).decode("utf-8")
@@ -46,7 +47,8 @@ class S3FileProcessor:
         if text is not None:
             es_body = {
                 'content': text,
-                'tags': self.get_tag_string(text)
+                'automated_tags': self.get_tag_string(text),
+                'tags': ''
             }
         document = Document(url)
         core_properties = document.core_properties
@@ -63,7 +65,8 @@ class S3FileProcessor:
         if text is not None:
             es_body = {
                 'content': text,
-                'tags': self.get_tag_string(text)
+                'automated_tags': self.get_tag_string(text),
+                'tags': ''
             }
         self.esClient.index_es(key, es_body)
 
