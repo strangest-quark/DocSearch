@@ -57,6 +57,7 @@ def search_full_text():
     j['res'] = es_client.full_text_search(full_text)
     return jsonify(j)
 
+
 # /search_content_and_tag
 @app.route('/search_content_and_tag', methods=['POST'])
 @cross_origin()
@@ -69,6 +70,7 @@ def search_content_and_tag():
     j = dict()
     j['res'] = es_client.text_and_tag_search(full_text, tag)
     return jsonify(j)
+
 
 @app.route('/add_connection', methods=['POST'])
 @cross_origin()
@@ -175,7 +177,7 @@ def add_tag():
         return jsonify(j), status.HTTP_400_BAD_REQUEST
     existing_tags = res["_source"]["tags"]
     if existing_tags != "":
-        tag = ','+tag
+        tag = ',' + tag
     body = {
         'doc': {
             'tags': existing_tags + tag
@@ -187,6 +189,83 @@ def add_tag():
         return jsonify(j)
     except:
         j["res"] = "Tag not added"
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
+
+
+@app.route('/delete_tag', methods=['POST'])
+@cross_origin()
+def delete_tag():
+    j = dict()
+    req_body = request.get_json()
+    file_key = req_body["file"]
+    tag = req_body["tag"]
+    connection_name = req_body["conn_name"]
+    try:
+        res = es_client.get_es(file_key, connection_name)
+        print(res)
+    except:
+        j["res"] = "Error in file get"
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
+    existing_tags = res["_source"]["tags"]
+    if existing_tags == "":
+        j["res"] = "No tags to delete"
+        return jsonify(j)
+    if ','+tag in existing_tags:
+        existing_tags = existing_tags.replace(','+tag, '')
+    elif tag in existing_tags:
+        existing_tags = existing_tags.replace(tag, '')
+    else:
+        j["res"] = "Tag not found"
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
+    body = {
+        'doc': {
+            'tags': existing_tags
+        }
+    }
+    try:
+        es_client.update_es(file_key, body, connection_name)
+        j["res"] = "Tag deleted"
+        return jsonify(j)
+    except:
+        j["res"] = "Tag not deleted"
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
+
+@app.route('/delete_automated_tag', methods=['POST'])
+@cross_origin()
+def delete_automated_tag():
+    j = dict()
+    req_body = request.get_json()
+    file_key = req_body["file"]
+    tag = req_body["tag"]
+    connection_name = req_body["conn_name"]
+    try:
+        res = es_client.get_es(file_key, connection_name)
+        print(res)
+    except:
+        j["res"] = "Error in file get"
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
+    existing_tags = res["_source"]["automated_tags"]
+    if existing_tags == "":
+        j["res"] = "No tags to delete"
+        return jsonify(j)
+    if ','+tag in existing_tags:
+        existing_tags = existing_tags.replace(','+tag, '')
+    elif tag in existing_tags:
+        existing_tags = existing_tags.replace(tag, '')
+    else:
+        j["res"] = "Automated Tag not found"
+        return jsonify(j), status.HTTP_400_BAD_REQUEST
+    body = {
+        'doc': {
+            'automated_tags': existing_tags
+        }
+    }
+    try:
+        es_client.update_es(file_key, body, connection_name)
+        j["res"] = "Tag deleted"
+        return jsonify(j)
+    except:
+        j["res"] = "Tag not deleted"
         return jsonify(j), status.HTTP_400_BAD_REQUEST
 
 
