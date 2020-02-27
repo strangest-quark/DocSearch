@@ -1,6 +1,7 @@
 from client.s3_client import S3Client
 from client.elastic_search_client import ES_Client
 from util.pdf_util import PDFUtil
+from util.automated_tags import AutomatedTags
 from config.config import Config
 import textract
 from io import BytesIO
@@ -12,9 +13,20 @@ class S3FileProcessor:
     def __init__(self, config: Config, aws_access_key_id, aws_secret_access_key, bucket, region, index):
         self.pdfUtil = PDFUtil()
         self.esClient = ES_Client(config)
+        self.automatedTags = AutomatedTags()
         self.s3Client = S3Client(aws_access_key_id, aws_secret_access_key, bucket, region)
         self.bucket = bucket
-        self.esClient.set_index(index.replace(' ','').lower())
+        self.esClient.set_index(index.replace(' ', '').lower())
+
+    def get_tag_string(self, text):
+        tags = self.automatedTags.get_tags(text)
+        tag_string = ''
+        if tags is not None:
+            for tag in tags:
+                tag_string = tag_string + "," + tag
+        if tag_string is not None:
+            tag_string = tag_string[1:]
+        return tag_string
 
     def process_pdf(self, body, key):
         text = self.pdfUtil.pdf_to_text(body)
@@ -23,7 +35,7 @@ class S3FileProcessor:
         if text is not None:
             es_body = {
                 'content': text,
-                'tags': ''
+                'tags': self.get_tag_string(text)
             }
             for obj in metadata[0]:
                 es_body[obj] = (metadata[0][obj]).decode("utf-8")
@@ -33,11 +45,14 @@ class S3FileProcessor:
         text = ' '.join(textract.process(url).decode('utf-8').splitlines())
         if text is not None:
             es_body = {
-                'content': text
+                'content': text,
+                'tags': self.get_tag_string(text)
             }
         document = Document(url)
         core_properties = document.core_properties
-        metadata = [attr for attr in dir(core_properties) if not callable(getattr(core_properties, attr)) and not attr.startswith("__") and not attr.startswith("_")]
+        metadata = [attr for attr in dir(core_properties) if
+                    not callable(getattr(core_properties, attr)) and not attr.startswith("__") and not attr.startswith(
+                        "_")]
         for meta in metadata:
             if getattr(core_properties, meta):
                 es_body[meta] = str(getattr(core_properties, meta))
@@ -47,7 +62,8 @@ class S3FileProcessor:
         text = ' '.join(body.decode('utf-8').splitlines())
         if text is not None:
             es_body = {
-                'content': text
+                'content': text,
+                'tags': self.get_tag_string(text)
             }
         self.esClient.index_es(key, es_body)
 
@@ -63,5 +79,3 @@ class S3FileProcessor:
             if key.endswith(".txt"):
                 body = self.s3Client.get_s3_file_body(key)
                 self.process_text(body, key)
-
-
