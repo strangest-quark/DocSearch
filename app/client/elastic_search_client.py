@@ -2,7 +2,7 @@ from elasticsearch import Elasticsearch
 from config.config import Config
 import nltk
 from nltk.corpus import wordnet
-import enchant
+from spellchecker import SpellChecker
 
 
 class ES_Client:
@@ -10,7 +10,7 @@ class ES_Client:
     def __init__(self, config: Config):
         self.es = Elasticsearch([config.es_host], port=config.es_port)
         self.index = config.es_index
-        self.enchant_client = enchant.Dict("en_US")
+        self.spell = SpellChecker()
 
     def get_similar(self, word):
         synonyms = []
@@ -56,8 +56,8 @@ class ES_Client:
 
     def get_alternate_query(self, query):
         other_queries = []
-        if not self.enchant_client.check(query):
-            other_queries = other_queries + self.enchant_client.suggest(query)
+        if len(self.spell.unknown(query)) > 0:
+            other_queries = other_queries + self.spell.candidates(query)
         other_queries = other_queries + self.get_similar(query)
         new_query = '(' + query + ') OR'
         for q in other_queries:
