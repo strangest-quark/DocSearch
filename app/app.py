@@ -9,6 +9,7 @@ from client.sql_client import SQLClient
 from config.config import Config
 from config.setup import Setup
 from handlers.connections_handler import ConnectionHandler
+from handlers.graph_handler import GraphHandler
 import json
 import argparse
 from flask_cors import CORS, cross_origin
@@ -24,6 +25,7 @@ config = None
 es_client = None
 sql_client = None
 connectionHandler = None
+graph_handler = None
 
 
 @app.route('/')
@@ -210,8 +212,8 @@ def delete_tag():
     if existing_tags == "":
         j["res"] = "No tags to delete"
         return jsonify(j)
-    if ','+tag in existing_tags:
-        existing_tags = existing_tags.replace(','+tag, '')
+    if ',' + tag in existing_tags:
+        existing_tags = existing_tags.replace(',' + tag, '')
     elif tag in existing_tags:
         existing_tags = existing_tags.replace(tag, '')
     else:
@@ -229,6 +231,7 @@ def delete_tag():
     except:
         j["res"] = "Tag not deleted"
         return jsonify(j), status.HTTP_400_BAD_REQUEST
+
 
 @app.route('/delete_automated_tag', methods=['POST'])
 @cross_origin()
@@ -248,8 +251,8 @@ def delete_automated_tag():
     if existing_tags == "":
         j["res"] = "No tags to delete"
         return jsonify(j)
-    if ','+tag in existing_tags:
-        existing_tags = existing_tags.replace(','+tag, '')
+    if ',' + tag in existing_tags:
+        existing_tags = existing_tags.replace(',' + tag, '')
     elif tag in existing_tags:
         existing_tags = existing_tags.replace(tag, '')
     else:
@@ -269,6 +272,15 @@ def delete_automated_tag():
         return jsonify(j), status.HTTP_400_BAD_REQUEST
 
 
+@app.route('/get_graph', methods=['POST'])
+@cross_origin()
+def get_graph():
+    j = dict()
+    req_body = request.get_json()
+    connection_name = req_body["conn_name"]
+    return jsonify(graph_handler.entry(connection_name))
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', help='<config file>', type=str, required=True)
@@ -279,6 +291,7 @@ if __name__ == '__main__':
     es_client = ES_Client(config)
     setup = Setup(config)
     sql_client = SQLClient(config)
+    graph_handler = GraphHandler(config)
 
     # sql_client.insert_csv_to_db("bbc")
     # sql_client.fetch_some_rows(5)

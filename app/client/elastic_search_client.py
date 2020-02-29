@@ -29,8 +29,7 @@ class ES_Client:
     def match_all(self):
         res = self.es.search(index=self.index, body={"query": {"match_all": {}}})
         print("Got %d Hits:" % res['hits']['total']['value'])
-        for hit in res['hits']['hits']:
-            print("_source: " + hit["_source"]["content"])
+        return res['hits']['hits']
 
     def full_text_search(self, query):
         res = self.es.search(index=self.index, body={"query": {"query_string": {"query": query}}})
