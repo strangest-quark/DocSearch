@@ -1,5 +1,8 @@
 from elasticsearch import Elasticsearch
 from config.config import Config
+import nltk
+from nltk.corpus import wordnet
+import enchant
 
 
 class ES_Client:
@@ -7,6 +10,14 @@ class ES_Client:
     def __init__(self, config: Config):
         self.es = Elasticsearch([config.es_host], port=config.es_port)
         self.index = config.es_index
+        self.enchant_client = enchant.Dict("en_US")
+
+    def get_similar(self, word):
+        synonyms = []
+        for syn in wordnet.synsets(word):
+            for l in syn.lemmas():
+                synonyms.append(l.name())
+        return synonyms
 
     def set_index(self, index):
         self.index = index
@@ -33,24 +44,50 @@ class ES_Client:
 
     def full_text_search(self, query):
         res = self.es.search(index=self.index, body={"query": {"query_string": {"query": query}}})
+        if res['hits']['total']['value'] == 0:
+            print('Retrying')
+            query = self.get_alternate_query(query)
+            print(query)
+            res = self.es.search(index=self.index, body={"query": {"query_string": {"query": query}}})
+            print("Got %d Hits:" % res['hits']['total']['value'])
+            return [res['hits']['hits'], True]
         print("Got %d Hits:" % res['hits']['total']['value'])
-        return res['hits']['hits']
+        return [res['hits']['hits'], False]
+
+    def get_alternate_query(self, query):
+        other_queries = []
+        if not self.enchant_client.check(query):
+            other_queries = other_queries + self.enchant_client.suggest(query)
+        other_queries = other_queries + self.get_similar(query)
+        new_query = '(' + query + ') OR'
+        for q in other_queries:
+            new_query = new_query + ' (' + q + ') OR'
+        return new_query[:-3]
 
     def text_and_tag_search(self, query, tag):
         search = '{"query": ' \
                  '{"bool": ' \
                  '{ "must": ' \
-                 '[{"term": {"content": "'+query+'"}},' \
-                 '{"bool": {"should": [' \
-                 '{"term": {"tags": "'+tag+'"}},' \
-                 '{"term": {"automated_tags": "'+tag+'"}}]}}]}}}'
+                 '[{"term": {"content": "' + query + '"}},' \
+                                                     '{"bool": {"should": [' \
+                                                     '{"term": {"tags": "' + tag + '"}},' \
+                                                                                   '{"term": {"automated_tags": "' + tag + '"}}]}}]}}}'
         res = self.es.search(index=self.index, body=search)
+        if res['hits']['total']['value'] == 0:
+            query = self.get_alternate_query(query)
+            res = self.es.search(index=self.index, body={"query": {"query_string": {"query": query + 'OR' + tag}}})
+            print("Got %d Hits:" % res['hits']['total']['value'])
+            return [res['hits']['hits'], True]
         print("Got %d Hits:" % res['hits']['total']['value'])
-        return res['hits']['hits']
+        return [res['hits']['hits'], False]
 
     def tag_search(self, tag):
-        search = '{"query": {"bool": {"should": [{"term": {"tags": "'+tag+'"}},{"term": {"automated_tags": "'+tag+'"}}]}}}'
+        search = '{"query": {"bool": {"should": [{"term": {"tags": "' + tag + '"}},{"term": {"automated_tags": "' + tag + '"}}]}}}'
         res = self.es.search(index=self.index, body=search)
-
+        if res['hits']['total']['value'] == 0:
+            query = self.get_alternate_query(tag)
+            res = self.es.search(index=self.index, body={"query": {"query_string": {"query": query}}})
+            print("Got %d Hits:" % res['hits']['total']['value'])
+            return [res['hits']['hits'], True]
         print("Got %d Hits:" % res['hits']['total']['value'])
-        return res['hits']['hits']
+        return [res['hits']['hits'], False]

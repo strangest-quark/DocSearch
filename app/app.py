@@ -43,7 +43,9 @@ def tag_search():
     conn = req_body["connection"].replace(" ", "").lower()
     es_client.set_index(conn)
     j = dict()
-    j['res'] = es_client.tag_search(tag)
+    res = es_client.tag_search(tag)
+    j['res'] = res[0]
+    j['semantic_res'] = res[1]
     return jsonify(j)
 
 
@@ -56,7 +58,9 @@ def search_full_text():
     conn = req_body["connection"].replace(" ", "").lower()
     es_client.set_index(conn)
     j = dict()
-    j['res'] = es_client.full_text_search(full_text)
+    res = es_client.full_text_search(full_text)
+    j['res'] = res[0]
+    j['semantic_res'] = res[1]
     return jsonify(j)
 
 
@@ -70,7 +74,9 @@ def search_content_and_tag():
     conn = req_body["connection"].replace(" ", "").lower()
     es_client.set_index(conn)
     j = dict()
-    j['res'] = es_client.text_and_tag_search(full_text, tag)
+    res = es_client.text_and_tag_search(full_text, tag)
+    j['res'] = res[0]
+    j['semantic_res'] = res[1]
     return jsonify(j)
 
 
