@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM tiangolo/uwsgi-nginx-flask:python3.6
 
 EXPOSE 80
 
