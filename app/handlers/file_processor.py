@@ -1,3 +1,5 @@
+import os
+
 from client.s3_client import S3Client
 from client.elastic_search_client import ES_Client
 from util.pdf_util import PDFUtil
@@ -15,6 +17,7 @@ class S3FileProcessor:
         self.esClient = ES_Client(config)
         self.automatedTags = AutomatedTags()
         self.s3Client = S3Client(aws_access_key_id, aws_secret_access_key, bucket, region)
+
         self.bucket = bucket
         self.esClient.set_index(index.replace(' ', '').lower())
 
@@ -78,7 +81,7 @@ class S3FileProcessor:
                 self.process_pdf(body, key)
             if key.endswith(".docx"):
                 self.s3Client.download_file(self.bucket, key)
-                self.process_doc(key, key)
+                self.process_doc('/tmp/'+key, key)
             if key.endswith(".txt"):
                 body = self.s3Client.get_s3_file_body(key)
                 self.process_text(body, key)

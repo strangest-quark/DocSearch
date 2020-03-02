@@ -22,6 +22,7 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 config = None
+setup = None
 es_client = None
 sql_client = None
 connectionHandler = None
@@ -103,7 +104,7 @@ def add_connection():
             j['res'] = "Only s3 connections supported"
             return jsonify(j), status.HTTP_400_BAD_REQUEST
     except:
-        j['res'] = "Error adding connection"
+        j['res'] = "Error in adding connection"
         return jsonify(j), status.HTTP_400_BAD_REQUEST
 
 
@@ -287,19 +288,26 @@ def get_graph():
     return jsonify(graph_handler.entry(connection_name))
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--config', help='<config file>', type=str, required=True)
-    args = parser.parse_args()
-    config_file = args.config
-    config = Config(config_file)
+@app.route('/setup', methods=['POST'])
+@cross_origin()
+def setup():
+    global connectionHandler
+    global es_client
+    global sql_client
+    global graph_handler
+    global config
+    config = Config('./config/config.yaml')
     connectionHandler = ConnectionHandler(config)
     es_client = ES_Client(config)
-    setup = Setup(config)
     sql_client = SQLClient(config)
     graph_handler = GraphHandler(config)
+    j = dict()
+    j['res'] = 'setup done'
+    return jsonify(j)
 
+
+if __name__ == '__main__':
     # sql_client.insert_csv_to_db("bbc")
     # sql_client.fetch_some_rows(5)
     # setup.populate_index_from_mysql()
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(debug=True, port=8080)

@@ -37,4 +37,4 @@ class S3Client:
         return self.bucket.Object(key).get()['Body'].read()
 
     def download_file(self, bucket_name, key):
-        self.bucket.download_file(key, key)
+        self.bucket.download_file(key, '/tmp/'+key)
