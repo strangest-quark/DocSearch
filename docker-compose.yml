@@ -28,7 +28,6 @@ services:
     ports:
       - "9201:9200"
 
-
   nginx:
     image: nginx:1.15-alpine
     depends_on:
@@ -38,15 +37,7 @@ services:
       - "443:443"
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-
+      - /etc/letsencrypt/:/etc/letsencrypt/
 #  kibana:
 #      image: docker.elastic.co/kibana/kibana:7.0.0
 #      ports:

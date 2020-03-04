@@ -14,7 +14,7 @@ import json
 import argparse
 from flask_cors import CORS, cross_origin
 from flask_api import status
-
+import time
 from handlers.file_processor import S3FileProcessor
 
 app = Flask(__name__)
@@ -310,4 +310,9 @@ if __name__ == '__main__':
     # sql_client.insert_csv_to_db("bbc")
     # sql_client.fetch_some_rows(5)
     # setup.populate_index_from_mysql()
+    #time.sleep(10)
+    try:
+        setup()
+    except:
+        print("e")
     app.run(debug=True, port=8080)

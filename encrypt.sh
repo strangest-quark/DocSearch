@@ -1,5 +1,5 @@
 #!/bin/bash
-domains=(teacher-portal.tk www.teacher-portal.tk)
+domains=(infineon-hack-doc-search.ml, www.infineon-hack-doc-search.ml)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="mail.example.com" # Adding a valid address is strongly recommended
