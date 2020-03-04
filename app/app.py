@@ -39,6 +39,7 @@ def hello_world():
 @app.route('/search_tag', methods=['POST'])
 @cross_origin()
 def tag_search():
+    setup()
     req_body = request.get_json()
     tag = req_body["tag"]
     conn = req_body["connection"].replace(" ", "").lower()
@@ -54,6 +55,7 @@ def tag_search():
 @app.route('/search_full_text', methods=['POST'])
 @cross_origin()
 def search_full_text():
+    setup()
     req_body = request.get_json()
     full_text = req_body["txt"]
     conn = req_body["connection"].replace(" ", "").lower()
@@ -69,6 +71,7 @@ def search_full_text():
 @app.route('/search_content_and_tag', methods=['POST'])
 @cross_origin()
 def search_content_and_tag():
+    setup()
     req_body = request.get_json()
     full_text = req_body["txt"]
     tag = req_body["tag"]
@@ -84,6 +87,7 @@ def search_content_and_tag():
 @app.route('/add_connection', methods=['POST'])
 @cross_origin()
 def add_connection():
+    setup()
     req_body = request.get_json()
     j = dict()
     try:
@@ -111,6 +115,7 @@ def add_connection():
 @app.route('/view_connection', methods=['GET'])
 @cross_origin()
 def view_connection():
+    setup()
     j = dict()
     j['res'] = connectionHandler.view_all_s3_connections()
     return jsonify(j)
@@ -119,6 +124,7 @@ def view_connection():
 @app.route('/process_files', methods=['POST'])
 @cross_origin()
 def process_files():
+    setup()
     req_body = request.get_json()
     connection_name = req_body["name"]
     records = connectionHandler.get_s3_connection(connection_name)
@@ -137,6 +143,7 @@ def process_files():
 @app.route('/view_file', methods=['POST'])
 @cross_origin()
 def view_file():
+    setup()
     req_body = request.get_json()
     connection_name = req_body["name"]
     file_name = req_body["file_name"]
@@ -158,6 +165,7 @@ def view_file():
 @app.route('/view_files', methods=['POST'])
 @cross_origin()
 def view_files():
+    setup()
     req_body = request.get_json()
     connection_name = req_body["name"]
     records = connectionHandler.get_s3_connection(connection_name)
@@ -173,6 +181,7 @@ def view_files():
 @app.route('/add_tag', methods=['POST'])
 @cross_origin()
 def add_tag():
+    setup()
     j = dict()
     req_body = request.get_json()
     file_key = req_body["file"]
@@ -204,6 +213,7 @@ def add_tag():
 @app.route('/delete_tag', methods=['POST'])
 @cross_origin()
 def delete_tag():
+    setup()
     j = dict()
     req_body = request.get_json()
     file_key = req_body["file"]
@@ -243,6 +253,7 @@ def delete_tag():
 @app.route('/delete_automated_tag', methods=['POST'])
 @cross_origin()
 def delete_automated_tag():
+    setup()
     j = dict()
     req_body = request.get_json()
     file_key = req_body["file"]
@@ -282,14 +293,13 @@ def delete_automated_tag():
 @app.route('/get_graph', methods=['POST'])
 @cross_origin()
 def get_graph():
+    setup()
     j = dict()
     req_body = request.get_json()
     connection_name = req_body["conn_name"]
     return jsonify(graph_handler.entry(connection_name))
 
 
-@app.route('/setup', methods=['POST'])
-@cross_origin()
 def setup():
     global connectionHandler
     global es_client
@@ -301,22 +311,7 @@ def setup():
     es_client = ES_Client(config)
     sql_client = SQLClient(config)
     graph_handler = GraphHandler(config)
-    j = dict()
-    j['res'] = 'setup done'
-    return jsonify(j)
 
 
 if __name__ == '__main__':
-    # sql_client.insert_csv_to_db("bbc")
-    # sql_client.fetch_some_rows(5)
-    # setup.populate_index_from_mysql()
-    #time.sleep(10)
-    try:
-        config = Config('./config/config.yaml')
-        connectionHandler = ConnectionHandler(config)
-        es_client = ES_Client(config)
-        sql_client = SQLClient(config)
-        graph_handler = GraphHandler(config)
-    except:
-        print("error")
     app.run(debug=True, port=8080)
