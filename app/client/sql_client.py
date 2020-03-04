@@ -14,7 +14,7 @@ class SQLClient:
         self.password = config.mysql_password
         self.port = config.mysql_port
         self.host = config.mysql_host
-        self.database  = config.mysql_db_name
+        self.database = config.mysql_db_name
         self.csv_filename = config.mysql_csv_filename
         self.mydb = None
 
@@ -24,7 +24,7 @@ class SQLClient:
             'password': self.password,
             'host': self.host,
             'port': self.port,
-            'database': self.db_name
+            'database': self.database
         }
         self.mydb = mysql.connector.connect(**db_config)
         cursor = self.mydb.cursor()
@@ -91,7 +91,7 @@ class SQLClient:
 
     def fetch_some_rows(self, rowCount):
         if self.mydb is None:
-            self.setup()s
+            self.setup()
         cursor = self.mydb.cursor()
         cursor.execute(self.select_rows_query)
         records = cursor.fetchmany(size=rowCount)
