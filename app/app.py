@@ -312,7 +312,11 @@ if __name__ == '__main__':
     # setup.populate_index_from_mysql()
     #time.sleep(10)
     try:
-        setup()
+        config = Config('./config/config.yaml')
+        connectionHandler = ConnectionHandler(config)
+        es_client = ES_Client(config)
+        sql_client = SQLClient(config)
+        graph_handler = GraphHandler(config)
     except:
-        print("e")
+        print("error")
     app.run(debug=True, port=8080)
