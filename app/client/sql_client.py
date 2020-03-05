@@ -14,7 +14,7 @@ class SQLClient:
         self.password = config.mysql_password
         self.port = config.mysql_port
         self.host = config.mysql_host
-        self.database  = config.mysql_db_name
+        self.database = config.mysql_db_name
         self.csv_filename = config.mysql_csv_filename
         self.mydb = None
 
@@ -24,12 +24,9 @@ class SQLClient:
             'password': self.password,
             'host': self.host,
             'port': self.port,
-            'database': self.db_name
+            'database': self.database
         }
         self.mydb = mysql.connector.connect(**db_config)
-        cursor = self.mydb.cursor()
-        self.mydb.commit()
-        cursor.close()
 
     def fetch_all_s3_connections(self):
         if self.mydb is None:
@@ -37,7 +34,9 @@ class SQLClient:
         cursor = self.mydb.cursor()
         cursor.execute(self.select_s3_rows_query)
         records = cursor.fetchall()
+        self.mydb.commit()
         cursor.close()
+        self.mydb.close()
         return records
 
     def fetch_all_bbc(self):
@@ -46,7 +45,9 @@ class SQLClient:
         cursor = self.mydb.cursor()
         cursor.execute(self.select_bbc_rows_query)
         records = cursor.fetchall()
+        self.mydb.commit()
         cursor.close()
+        self.mydb.close()
         return records
 
     def fetch_connection(self, name):
@@ -56,7 +57,9 @@ class SQLClient:
         print('SELECT * FROM s3_connections WHERE name="'+name+'"')
         cursor.execute('SELECT * FROM s3_connections WHERE name="'+name+'"')
         records = cursor.fetchall()
+        self.mydb.commit()
         cursor.close()
+        self.mydb.close()
         return records
 
     def insert_into_s3_connections(self, name, access_key_id, access_key, bucket, region):
@@ -69,6 +72,9 @@ class SQLClient:
             cursor.execute(query)
         except:
             return "Storing this connection failed"
+        self.mydb.commit()
+        cursor.close()
+        self.mydb.close()
         return 200
 
     def insert_csv_to_db(self, table_name):
@@ -87,11 +93,12 @@ class SQLClient:
                     print("Insert for id: " + str(row[0]) + " failed")
         self.mydb.commit()
         cursor.close()
+        self.mydb.close()
         print("Csv to mysql db data insertion done")
 
     def fetch_some_rows(self, rowCount):
         if self.mydb is None:
-            self.setup()s
+            self.setup()
         cursor = self.mydb.cursor()
         cursor.execute(self.select_rows_query)
         records = cursor.fetchmany(size=rowCount)
@@ -100,4 +107,8 @@ class SQLClient:
             print("Content: ", row[1])
             print("Tags: ", row[2])
             print("\n")
+        self.mydb.commit()
+        cursor.close()
+        self.mydb.close()
         return records
+

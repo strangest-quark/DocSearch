@@ -39,8 +39,8 @@ class GraphHandler:
                 set3 = set1 & set2
                 for k in set3:
                     edge = []
-                    edge.append(i)
-                    edge.append(j)
+                    edge.append(i+1)
+                    edge.append(j+1)
                     edge.append(k)
                     edges.append(edge)
         return edges
@@ -55,6 +55,7 @@ class GraphHandler:
             j['to'] = edge[1]
             j['label'] = edge[2]
             ed.append(j)
+            i = i+1
         return ed
 
     def entry(self, conn_name):

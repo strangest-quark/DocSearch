@@ -8,6 +8,13 @@ from config.config import Config
 import textract
 from io import BytesIO
 from docx import Document
+from sumy.parsers.html import HtmlParser
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.lsa import LsaSummarizer as Summarizer
+from sumy.nlp.stemmers import Stemmer
+from sumy.utils import get_stop_words
+import re
 
 
 class S3FileProcessor:
@@ -24,9 +31,11 @@ class S3FileProcessor:
     def get_tag_string(self, text):
         tags = self.automatedTags.get_tags(text)
         tag_string = ''
+        regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
         if tags is not None:
             for tag in tags:
-                tag_string = tag_string + "," + tag
+                if regex.search(tag) is None:
+                    tag_string = tag_string + "," + tag
         if tag_string is not None:
             tag_string = tag_string[1:]
         return tag_string
@@ -39,7 +48,8 @@ class S3FileProcessor:
             es_body = {
                 'content': text,
                 'automated_tags': self.get_tag_string(text),
-                'tags': ''
+                'tags': '',
+                'summary': self.get_summary(text)
             }
             for obj in metadata[0]:
                 es_body[obj] = (metadata[0][obj]).decode("utf-8")
@@ -51,7 +61,8 @@ class S3FileProcessor:
             es_body = {
                 'content': text,
                 'automated_tags': self.get_tag_string(text),
-                'tags': ''
+                'tags': '',
+                'summary': self.get_summary(text)
             }
         document = Document(url)
         core_properties = document.core_properties
@@ -69,7 +80,8 @@ class S3FileProcessor:
             es_body = {
                 'content': text,
                 'automated_tags': self.get_tag_string(text),
-                'tags': ''
+                'tags': '',
+                'summary': self.get_summary(text)
             }
         self.esClient.index_es(key, es_body)
 
@@ -85,3 +97,19 @@ class S3FileProcessor:
             if key.endswith(".txt"):
                 body = self.s3Client.get_s3_file_body(key)
                 self.process_text(body, key)
+
+    def get_summary(self, text):
+        LANGUAGE = "english"
+        SENTENCES_COUNT = 3
+        parser = PlaintextParser.from_string(text, Tokenizer(LANGUAGE))
+        stemmer = Stemmer(LANGUAGE)
+
+        summarizer = Summarizer(stemmer)
+        summarizer.stop_words = get_stop_words(LANGUAGE)
+        summary=""
+
+        for sentence in summarizer(parser.document, SENTENCES_COUNT):
+            summary += str(sentence)
+        return summary
+
+
