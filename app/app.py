@@ -334,11 +334,17 @@ def delete_automated_tag():
 @cross_origin()
 def get_graph():
     setup()
-    j = dict()
     req_body = request.get_json()
+    graph_type = req_body['type']
     connection_name = req_body["conn_name"]
-    return jsonify(graph_handler.entry(connection_name))
-
+    if graph_type == 'doc':
+        return jsonify(graph_handler.doc_entry(connection_name))
+    elif graph_type == 'tag':
+        return jsonify(graph_handler.tag_entry(connection_name))
+    else:
+        j = dict()
+        j["res"] = "Wrong graph type sent"
+        return jsonify(j)
 
 def setup():
     global connectionHandler
@@ -346,7 +352,7 @@ def setup():
     global sql_client
     global graph_handler
     global config
-    config = Config('./config/local.yaml')
+    config = Config('./config/config.yaml')
     connectionHandler = ConnectionHandler(config)
     es_client = ES_Client(config)
     sql_client = SQLClient(config)
