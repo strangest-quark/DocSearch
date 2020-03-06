@@ -34,7 +34,7 @@ class S3FileProcessor:
         tags = self.automatedTags.get_tags(text)
         tag_array=[]
         tag_string = ''
-        regex = re.compile('[@_!#$%^&*()<>?/\|}{~:°]')
+        regex = re.compile('[@_!#$%^&*()<>?/\|}{~:°"’”.]')
         if tags is not None:
             for tag in tags:
                 if regex.search(tag) is None:

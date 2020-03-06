@@ -1,3 +1,2 @@
-docker-compose down -d
-docker-compose build -d
+docker-compose build
 docker-compose up -d
