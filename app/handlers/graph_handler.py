@@ -142,6 +142,7 @@ class GraphHandler:
         return j
 
     def tag_entry(self, conn_name):
+        print(conn_name)
         self.es_client.set_index(conn_name)
         tag_dict = self.get_tag_dict()
         return self.process_tag_dict(tag_dict)
