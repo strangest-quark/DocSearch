@@ -34,6 +34,17 @@ graph_handler = None
 def hello_world():
     return 'DocSearch is running!'
 
+@app.route('/search_zero', methods=['POST'])
+@cross_origin()
+def search_zero():
+    setup()
+    req_body = request.get_json()
+    conn = req_body["connection"].replace(" ", "").lower()
+    es_client.set_index(conn)
+    j = dict()
+    res = es_client.match_all()
+    j['res'] = res
+    return jsonify(j)
 
 # /search_tag
 @app.route('/search_tag', methods=['POST'])
@@ -98,6 +109,11 @@ def add_connection():
                 res = keys
                 j["res"] = keys
                 if isinstance(res, list):
+                    try:
+                       p=_process_files(req_body["name"])
+                    except:
+                       p="processing failed"
+                    j["processed"] = p
                     return jsonify(j)
                 else:
                     return jsonify(j), status.HTTP_400_BAD_REQUEST
@@ -119,6 +135,18 @@ def view_connection():
     j = dict()
     j['res'] = connectionHandler.view_all_s3_connections()
     return jsonify(j)
+
+def _process_files(connection_name):
+    setup()
+    records = connectionHandler.get_s3_connection(connection_name)
+    s3FileProcessor = S3FileProcessor(config,
+                                      records[0][1],
+                                      records[0][2],
+                                      records[0][3],
+                                      records[0][4],
+                                      records[0][0])
+    s3FileProcessor.read_bucket()
+    return "processed"
 
 
 @app.route('/process_files', methods=['POST'])
