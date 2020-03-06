@@ -62,12 +62,39 @@ class SQLClient:
         self.mydb.close()
         return records
 
+    def fetch_tags(self, name):
+        if self.mydb is None:
+            self.setup()
+        cursor = self.mydb.cursor()
+        print('SELECT * FROM tags WHERE name="'+name+'"')
+        cursor.execute('SELECT * FROM tags WHERE name="'+name+'"')
+        records = cursor.fetchall()
+        self.mydb.commit()
+        cursor.close()
+        self.mydb.close()
+        return records
+
     def insert_into_s3_connections(self, name, access_key_id, access_key, bucket, region):
         if self.mydb is None:
             self.setup()
         cursor = self.mydb.cursor()
         try:
             query = 'INSERT INTO s3_connections(name, access_key_id, access_key, bucket, region) VALUES("'+name+'", "'+access_key_id+'", "'+access_key+'", "'+bucket+'", "'+region+'")'
+            print(query)
+            cursor.execute(query)
+        except:
+            return "Storing this connection failed"
+        self.mydb.commit()
+        cursor.close()
+        self.mydb.close()
+        return 200
+
+    def insert_into_tags(self, name, tags):
+        if self.mydb is None:
+            self.setup()
+        cursor = self.mydb.cursor()
+        try:
+            query = 'INSERT INTO tags(name, tags) VALUES("'+name+'","'+tags+'")'
             print(query)
             cursor.execute(query)
         except:

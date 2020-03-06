@@ -30,18 +30,18 @@ class GraphHandler:
         return tags
 
     def get_edges(self, tags):
-        edges=[]
+        edges = []
         for i in range(len(tags)):
-            for j in range(i+1, len(tags)):
-                print(str(i)+" "+str(j))
+            for j in range(i + 1, len(tags)):
                 set1 = set(tags[i])
                 set2 = set(tags[j])
                 set3 = set1 & set2
-                for k in set3:
-                    edge = []
-                    edge.append(i+1)
-                    edge.append(j+1)
-                    edge.append(k)
+                if bool(set3):
+                    edge = [i + 1, j + 1]
+                    tag_str = ""
+                    for k in set3:
+                        tag_str = tag_str + "," +k
+                    edge.append(tag_str[1:])
                     edges.append(edge)
         return edges
 
@@ -55,7 +55,7 @@ class GraphHandler:
             j['to'] = edge[1]
             j['label'] = edge[2]
             ed.append(j)
-            i = i+1
+            i = i + 1
         return ed
 
     def entry(self, conn_name):

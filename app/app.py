@@ -278,6 +278,18 @@ def delete_tag():
         return jsonify(j), status.HTTP_400_BAD_REQUEST
 
 
+@app.route('/fetch_tags', methods=['POST'])
+@cross_origin()
+def fetch_tags():
+    setup()
+    req_body = request.get_json()
+    j = dict()
+    res = sql_client.fetch_tags(req_body['name'])
+    tag_string = res[0][1]
+    j['res'] = tag_string.split()
+    return jsonify(j)
+
+
 @app.route('/delete_automated_tag', methods=['POST'])
 @cross_origin()
 def delete_automated_tag():
@@ -334,7 +346,7 @@ def setup():
     global sql_client
     global graph_handler
     global config
-    config = Config('./config/config.yaml')
+    config = Config('./config/local.yaml')
     connectionHandler = ConnectionHandler(config)
     es_client = ES_Client(config)
     sql_client = SQLClient(config)

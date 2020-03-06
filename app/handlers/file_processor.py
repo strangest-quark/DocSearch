@@ -5,6 +5,7 @@ from client.elastic_search_client import ES_Client
 from util.pdf_util import PDFUtil
 from util.automated_tags import AutomatedTags
 from config.config import Config
+from client.sql_client import SQLClient
 import textract
 from io import BytesIO
 from docx import Document
@@ -22,10 +23,11 @@ class S3FileProcessor:
     def __init__(self, config: Config, aws_access_key_id, aws_secret_access_key, bucket, region, index):
         self.pdfUtil = PDFUtil()
         self.esClient = ES_Client(config)
+        self.sqlClient = SQLClient(config)
         self.automatedTags = AutomatedTags()
         self.s3Client = S3Client(aws_access_key_id, aws_secret_access_key, bucket, region)
-
         self.bucket = bucket
+        self.index = index
         self.esClient.set_index(index.replace(' ', '').lower())
 
     def get_tag_string(self, text):
@@ -45,22 +47,25 @@ class S3FileProcessor:
         metadata = self.pdfUtil.get_metadata(body)
         print(text)
         if text is not None:
+            tag_string = self.get_tag_string(text)
             es_body = {
                 'content': text,
-                'automated_tags': self.get_tag_string(text),
+                'automated_tags': tag_string,
                 'tags': '',
                 'summary': self.get_summary(text)
             }
             for obj in metadata[0]:
                 es_body[obj] = (metadata[0][obj]).decode("utf-8")
         self.esClient.index_es(key, es_body)
+        return tag_string
 
     def process_doc(self, url, key):
         text = ' '.join(textract.process(url).decode('utf-8').splitlines())
         if text is not None:
+            tag_string = self.get_tag_string(text)
             es_body = {
                 'content': text,
-                'automated_tags': self.get_tag_string(text),
+                'automated_tags': tag_string,
                 'tags': '',
                 'summary': self.get_summary(text)
             }
@@ -73,30 +78,42 @@ class S3FileProcessor:
             if getattr(core_properties, meta):
                 es_body[meta] = str(getattr(core_properties, meta))
         self.esClient.index_es(key, es_body)
+        return tag_string
 
     def process_text(self, body, key):
         text = ' '.join(body.decode('utf-8').splitlines())
         if text is not None:
+            tag_string = self.get_tag_string(text)
             es_body = {
                 'content': text,
-                'automated_tags': self.get_tag_string(text),
+                'automated_tags': tag_string,
                 'tags': '',
                 'summary': self.get_summary(text)
             }
         self.esClient.index_es(key, es_body)
+        return tag_string
+
+    def add_to_unique_tag_list(self, tag_string):
+        tag_string = tag_string.replace(',', ' ')
+        self.sqlClient.insert_into_tags(self.index, tag_string)
 
     def read_bucket(self):
         keys = self.s3Client.get_s3_keys(self.bucket)
+        tag_string = ""
         for key in keys:
             if key.endswith(".pdf"):
                 body = self.s3Client.get_s3_file_body(key)
-                self.process_pdf(body, key)
+                tag_string = tag_string + "," + self.process_pdf(body, key)
             if key.endswith(".docx"):
                 self.s3Client.download_file(self.bucket, key)
-                self.process_doc('/tmp/'+key, key)
+                tag_string = tag_string + "," + self.process_doc('/tmp/' + key, key)
             if key.endswith(".txt"):
                 body = self.s3Client.get_s3_file_body(key)
-                self.process_text(body, key)
+                tag_string = tag_string + "," + self.process_text(body, key)
+        try:
+            self.add_to_unique_tag_list(tag_string)
+        except:
+            print("Error in adding tags to db")
 
     def get_summary(self, text):
         LANGUAGE = "english"
@@ -106,10 +123,8 @@ class S3FileProcessor:
 
         summarizer = Summarizer(stemmer)
         summarizer.stop_words = get_stop_words(LANGUAGE)
-        summary=""
+        summary = ""
 
         for sentence in summarizer(parser.document, SENTENCES_COUNT):
             summary += str(sentence)
         return summary
-
-

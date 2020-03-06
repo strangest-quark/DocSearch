@@ -3,10 +3,10 @@ MYSQL:
   PASSWORD: root
   DB_NAME: search
   HOST: localhost
-  PORT: 32000
+  PORT: 3307
   CSV_FILENAME: /app/data/BBC_news_dataset.csv
 
 ES:
   INDEX: bbc
   HOST: localhost
-  PORT: 9200
+  PORT: 9201
