@@ -1,5 +1,8 @@
 # DocSearch
 
+Site - http://searchecy.netlify.com/
+Frontend - https://github.com/ikram-shah/searchECY-Frontend
+
 ## Run
 
 The following command builds code changes in /app and brings up app-server, elastic-search and mysql. Server can be tested using hitting endpoints in postman collection.
