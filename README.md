@@ -11,7 +11,7 @@ To bring down existing containers and start fresh use:
 `sh restart.sh`
 
 ## Postman
-https://www.getpostman.com/collections/496c19914859c412f7ad
+https://github.com/strangest-quark/DocSearch/blob/master/Search.postman_collection.json
 
 ## Code changes
 
