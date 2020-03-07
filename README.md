@@ -6,6 +6,10 @@ The following command builds code changes in /app and brings up app-server, elas
 
 `sh start.sh`
 
+To bring down existing containers and start fresh use:
+
+`sh restart.sh`
+
 ## Postman
 https://www.getpostman.com/collections/496c19914859c412f7ad
 
