@@ -1,0 +1,1105 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Search",
+		"_postman_id": "ddb32084-6732-8fc7-d496-723f2f56bff4",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tag Search",
+			"request": {
+				"url": "http://localhost/search_tag",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"tag\": \"taiwan\",\n\t\"connection\": \"ikrams3\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "10b941a8-8b0c-4b4b-a581-99bc7d501d72",
+					"name": "Tag Search",
+					"originalRequest": {
+						"url": "http://localhost/search_tag",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"tag\": \"people\",\n\t\"connection\": \"ikrams3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1256"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.6.10"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 27 Feb 2020 09:13:02 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": [\n        {\n            \"_id\": \"ChinaWorries.pdf\",\n            \"_index\": \"ikrams3\",\n            \"_score\": 0.68716604,\n            \"_source\": {\n                \"Producer\": \"Skia/PDF m82\",\n                \"automated_tags\": \"people,work,country,China,jobs,business,insurance,contributions,return,meeting,plans,New\",\n                \"content\": \"China starts to get back to work as leaders worry about people’s jobs BEIJING — While ​Chinese​ authorities try to control the spread of the new virus, they are moving quickly to stall its impact on the economy, especially on people’s jobs. This past Tuesday, the powerful State Council decided at a meeting to waive some business’ contributions to social insurance plans through June, and emphasized that “stable employment” must be a priority. These policy moves also come as the country begins a gradual return to work in manufacturing, technology and other major industries. The coronavirus that has killed more than 2,000 people began spreading rapidly in mainland China in January ahead of the Lunar New Year holiday and forced ​more than half of the country to shut down​ for at least a week longer than planned.  \\f\",\n                \"tags\": \"corona\"\n            },\n            \"_type\": \"_doc\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Full Text Search",
+			"request": {
+				"url": "http://localhost/search_full_text",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"txt\": \"taiwan\",\n\t\"connection\": \"Ikram s3\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "c106061a-2089-4cd6-bde4-41c3066cef0f",
+					"name": "Full Text Search",
+					"originalRequest": {
+						"url": "http://localhost/search_full_text",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"txt\": \"china\",\n\t\"connection\": \"ikrams3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1019"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 23 Feb 2020 12:12:06 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": [\n        {\n            \"_id\": \"ChinaWorries.pdf\",\n            \"_index\": \"ikrams3\",\n            \"_score\": 1.3921447,\n            \"_source\": {\n                \"Producer\": \"Skia/PDF m82\",\n                \"content\": \"China starts to get back to work as leaders worry about people’s jobs BEIJING — While ​Chinese​ authorities try to control the spread of the new virus, they are moving quickly to stall its impact on the economy, especially on people’s jobs. This past Tuesday, the powerful State Council decided at a meeting to waive some business’ contributions to social insurance plans through June, and emphasized that “stable employment” must be a priority. These policy moves also come as the country begins a gradual return to work in manufacturing, technology and other major industries. The coronavirus that has killed more than 2,000 people began spreading rapidly in mainland China in January ahead of the Lunar New Year holiday and forced ​more than half of the country to shut down​ for at least a week longer than planned.  \\f\"\n            },\n            \"_type\": \"_doc\"\n        }\n    ]\n}"
+				},
+				{
+					"id": "f37648e8-1071-40fa-973b-02d8b0a5eeb9",
+					"name": "Full Text Search - Non semantic search",
+					"originalRequest": {
+						"url": "http://localhost/search_full_text",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"txt\": \"china\",\n\t\"connection\": \"Ikram s3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1275"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 29 Feb 2020 18:06:44 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": [\n        {\n            \"_id\": \"ChinaWorries.pdf\",\n            \"_index\": \"ikrams3\",\n            \"_score\": 1.3921447,\n            \"_source\": {\n                \"Producer\": \"Skia/PDF m82\",\n                \"automated_tags\": \"people,work,country,China,jobs,business,insurance,contributions,return,meeting,plans,New\",\n                \"content\": \"China starts to get back to work as leaders worry about people’s jobs BEIJING — While ​Chinese​ authorities try to control the spread of the new virus, they are moving quickly to stall its impact on the economy, especially on people’s jobs. This past Tuesday, the powerful State Council decided at a meeting to waive some business’ contributions to social insurance plans through June, and emphasized that “stable employment” must be a priority. These policy moves also come as the country begins a gradual return to work in manufacturing, technology and other major industries. The coronavirus that has killed more than 2,000 people began spreading rapidly in mainland China in January ahead of the Lunar New Year holiday and forced ​more than half of the country to shut down​ for at least a week longer than planned.  \\f\",\n                \"tags\": \"\"\n            },\n            \"_type\": \"_doc\"\n        }\n    ],\n    \"semantic_res\": false\n}"
+				},
+				{
+					"id": "0b1df1a6-5944-44cd-a284-5a4f2fb89553",
+					"name": "Full Text Search",
+					"originalRequest": {
+						"url": "http://localhost/search_full_text",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"txt\": \"china\",\n\t\"connection\": \"Ikram s3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1255"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.6.10"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 27 Feb 2020 09:13:07 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": [\n        {\n            \"_id\": \"ChinaWorries.pdf\",\n            \"_index\": \"ikrams3\",\n            \"_score\": 0.9766209,\n            \"_source\": {\n                \"Producer\": \"Skia/PDF m82\",\n                \"automated_tags\": \"people,work,country,China,jobs,business,insurance,contributions,return,meeting,plans,New\",\n                \"content\": \"China starts to get back to work as leaders worry about people’s jobs BEIJING — While ​Chinese​ authorities try to control the spread of the new virus, they are moving quickly to stall its impact on the economy, especially on people’s jobs. This past Tuesday, the powerful State Council decided at a meeting to waive some business’ contributions to social insurance plans through June, and emphasized that “stable employment” must be a priority. These policy moves also come as the country begins a gradual return to work in manufacturing, technology and other major industries. The coronavirus that has killed more than 2,000 people began spreading rapidly in mainland China in January ahead of the Lunar New Year holiday and forced ​more than half of the country to shut down​ for at least a week longer than planned.  \\f\",\n                \"tags\": \"corona\"\n            },\n            \"_type\": \"_doc\"\n        }\n    ]\n}"
+				},
+				{
+					"id": "386a2526-d825-48a2-869b-5a4e93aaef05",
+					"name": "Full Text Search - Semantic res",
+					"originalRequest": {
+						"url": "http://localhost/search_full_text",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"txt\": \"taiwan\",\n\t\"connection\": \"Ikram s3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1274"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 29 Feb 2020 18:07:17 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": [\n        {\n            \"_id\": \"ChinaWorries.pdf\",\n            \"_index\": \"ikrams3\",\n            \"_score\": 1.3921447,\n            \"_source\": {\n                \"Producer\": \"Skia/PDF m82\",\n                \"automated_tags\": \"people,work,country,China,jobs,business,insurance,contributions,return,meeting,plans,New\",\n                \"content\": \"China starts to get back to work as leaders worry about people’s jobs BEIJING — While ​Chinese​ authorities try to control the spread of the new virus, they are moving quickly to stall its impact on the economy, especially on people’s jobs. This past Tuesday, the powerful State Council decided at a meeting to waive some business’ contributions to social insurance plans through June, and emphasized that “stable employment” must be a priority. These policy moves also come as the country begins a gradual return to work in manufacturing, technology and other major industries. The coronavirus that has killed more than 2,000 people began spreading rapidly in mainland China in January ahead of the Lunar New Year holiday and forced ​more than half of the country to shut down​ for at least a week longer than planned.  \\f\",\n                \"tags\": \"\"\n            },\n            \"_type\": \"_doc\"\n        }\n    ],\n    \"semantic_res\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Add Connection",
+			"request": {
+				"url": "http://localhost/add_connection",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"access_key_id\": \"**************\",\n\t\"access_key\": \"********************\",\n\t\"bucket\": \"infineon-doc-search\",\n\t\"region\": \"ap-south-1\",\n\t\"connection_type\":\"s3\",\n\t\"name\": \"*********\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "d83b88d3-a115-4ebb-91a4-dd4fcd6d045c",
+					"name": "Add Connection",
+					"originalRequest": {
+						"url": "http://localhost/add_connection",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"access_key_id\": \"AKIA4UOIW7WWLSAZCZ23\",\n\t\"access_key\": \"NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa\",\n\t\"bucket\": \"infineon-doc-search\",\n\t\"region\": \"ap-south-1\",\n\t\"connection_type\": \"s3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "117"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 22 Feb 2020 12:50:07 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": [\n        \"ChinaWorries.pdf\",\n        \"Trump's high approval rating .docx\",\n        \"US India Trade Deal.txt\"\n    ]\n}"
+				},
+				{
+					"id": "456a6ee7-e036-4ca1-a8cd-5ab63de30047",
+					"name": "Add Connection - Fail",
+					"originalRequest": {
+						"url": "http://localhost/add_connection",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"access_key_id\": \"AKIA4UOIW7WWLSAZCZ2\",\n\t\"access_key\": \"NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa\",\n\t\"bucket\": \"infineon-doc-search\",\n\t\"region\": \"ap-south-1\",\n\t\"connection_type\": \"s3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "160"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 22 Feb 2020 12:58:20 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": \"An error occurred (InvalidAccessKeyId) when calling the ListObjects operation: The AWS Access Key Id you provided does not exist in our records.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "View Connection",
+			"request": {
+				"url": "http://localhost/view_connection",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "2b36c327-0c63-4cfe-9f53-041ba952c26d",
+					"name": "View Connection - Multiple",
+					"originalRequest": {
+						"url": "http://localhost:8000/view_connection",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"access_key_id\": \"AKIA4UOIW7WWLSAZCZ23\",\n\t\"access_key\": \"NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa\",\n\t\"bucket\": \"infineon-doc-search\",\n\t\"region\": \"ap-south-1\",\n\t\"connection_type\":\"s3\",\n\t\"name\": \"Ikram s3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "728"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 22 Feb 2020 13:43:56 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": {\n        \"5\": {\n            \"access_key\": \"'NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa'\",\n            \"acess_key_id\": \"'AKIA4UOIW7WWLSAZCZ23'\",\n            \"bucket\": \"'infineon-doc-search'\",\n            \"name\": \"'Ikram s3'\",\n            \"region\": \"'ap-south-1'\"\n        },\n        \"6\": {\n            \"access_key\": \"'NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa'\",\n            \"acess_key_id\": \"'AKIA4UOIW7WWLSAZCZ23'\",\n            \"bucket\": \"'infineon-doc-search'\",\n            \"name\": \"'Ikram s3'\",\n            \"region\": \"'ap-south-1'\"\n        },\n        \"7\": {\n            \"access_key\": \"'NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa'\",\n            \"acess_key_id\": \"'AKIA4UOIW7WWLSAZCZ23'\",\n            \"bucket\": \"'infineon-doc-search'\",\n            \"name\": \"'Ikram s3'\",\n            \"region\": \"'ap-south-1'\"\n        }\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Process Files",
+			"request": {
+				"url": "http://localhost/process_files",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Ikram s3\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "84953b37-421a-493c-b623-7881ebc94c02",
+					"name": "View Connection - Multiple",
+					"originalRequest": {
+						"url": "http://localhost:8000/view_connection",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"access_key_id\": \"AKIA4UOIW7WWLSAZCZ23\",\n\t\"access_key\": \"NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa\",\n\t\"bucket\": \"infineon-doc-search\",\n\t\"region\": \"ap-south-1\",\n\t\"connection_type\":\"s3\",\n\t\"name\": \"Ikram s3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "728"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 22 Feb 2020 13:43:56 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": {\n        \"5\": {\n            \"access_key\": \"'NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa'\",\n            \"acess_key_id\": \"'AKIA4UOIW7WWLSAZCZ23'\",\n            \"bucket\": \"'infineon-doc-search'\",\n            \"name\": \"'Ikram s3'\",\n            \"region\": \"'ap-south-1'\"\n        },\n        \"6\": {\n            \"access_key\": \"'NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa'\",\n            \"acess_key_id\": \"'AKIA4UOIW7WWLSAZCZ23'\",\n            \"bucket\": \"'infineon-doc-search'\",\n            \"name\": \"'Ikram s3'\",\n            \"region\": \"'ap-south-1'\"\n        },\n        \"7\": {\n            \"access_key\": \"'NdCe1b+2/yvYC5cOI0eyKzpqq9EAF7Q8kC0+sCJa'\",\n            \"acess_key_id\": \"'AKIA4UOIW7WWLSAZCZ23'\",\n            \"bucket\": \"'infineon-doc-search'\",\n            \"name\": \"'Ikram s3'\",\n            \"region\": \"'ap-south-1'\"\n        }\n    }\n}"
+				},
+				{
+					"id": "e50ec03b-f127-4941-97e0-06ef73fb4308",
+					"name": "Process Files",
+					"originalRequest": {
+						"url": "http://localhost/process_files",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Ikram s3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "20"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 23 Feb 2020 12:08:13 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": \"Processed\"\n}"
+				}
+			]
+		},
+		{
+			"name": "View Files",
+			"request": {
+				"url": "http://localhost/view_files",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Ikram s3\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "4af6cffa-3081-4fcb-a17f-7f7235cef940",
+					"name": "View Files",
+					"originalRequest": {
+						"url": "http://localhost/view_files",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Ikram s3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "92"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.6.10"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 23 Feb 2020 12:58:29 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": [\n        \"ChinaWorries.pdf\",\n        \"Trump's high approval rating .docx\",\n        \"US India Trade Deal.txt\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "View File",
+			"request": {
+				"url": "http://localhost/view_file",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Ikram s3\",\n\t\"file_name\": \"ChinaWorries.pdf\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "b03764bf-ae06-411d-8d50-d637e3a667cc",
+					"name": "View File",
+					"originalRequest": {
+						"url": "http://localhost/view_file",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Ikram s3\",\n\t\"file_name\": \"ChinaWorries.pdf\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "351"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.6.10"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 23 Feb 2020 12:56:48 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": \"https://s3.ap-south-1.amazonaws.com/infineon-doc-search/ChinaWorries.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4UOIW7WWLSAZCZ23%2F20200223%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20200223T125648Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=6ea4e769dcf4d1a592756f18f536bbe75746765bd10aa0219f2e8cd29207a34f\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Add Tag",
+			"request": {
+				"url": "http://localhost/add_tag",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"tag\": \"corona\",\n\t\"conn_name\": \"ikrams3\",\n\t\"file\": \"ChinaWorries.pdf\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "8cb85ef5-e6d0-4b2b-b6dd-32b026b5a9d3",
+					"name": "Add Tag",
+					"originalRequest": {
+						"url": "http://localhost/add_tag",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"tag\": \"china\",\n\t\"conn_name\": \"ikrams3\",\n\t\"file\": \"ChinaWorries.pdf\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "25"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 25 Feb 2020 15:23:32 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": \"Tag added\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Search text and tags",
+			"request": {
+				"url": "http://localhost/search_content_and_tag",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"tag\": \"people\",\n\t\"txt\": \"china\",\n\t\"connection\": \"ikrams3\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "10acec00-1569-46bc-98c7-7320c47a66b6",
+					"name": "Search text and tags",
+					"originalRequest": {
+						"url": "http://localhost/search_content_and_tag",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"tag\": \"people\",\n\t\"txt\": \"china\",\n\t\"connection\": \"ikrams3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1255"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.6.10"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 27 Feb 2020 09:13:25 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": [\n        {\n            \"_id\": \"ChinaWorries.pdf\",\n            \"_index\": \"ikrams3\",\n            \"_score\": 1.6637869,\n            \"_source\": {\n                \"Producer\": \"Skia/PDF m82\",\n                \"automated_tags\": \"people,work,country,China,jobs,business,insurance,contributions,return,meeting,plans,New\",\n                \"content\": \"China starts to get back to work as leaders worry about people’s jobs BEIJING — While ​Chinese​ authorities try to control the spread of the new virus, they are moving quickly to stall its impact on the economy, especially on people’s jobs. This past Tuesday, the powerful State Council decided at a meeting to waive some business’ contributions to social insurance plans through June, and emphasized that “stable employment” must be a priority. These policy moves also come as the country begins a gradual return to work in manufacturing, technology and other major industries. The coronavirus that has killed more than 2,000 people began spreading rapidly in mainland China in January ahead of the Lunar New Year holiday and forced ​more than half of the country to shut down​ for at least a week longer than planned.  \\f\",\n                \"tags\": \"corona\"\n            },\n            \"_type\": \"_doc\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete Tag",
+			"request": {
+				"url": "http://localhost/delete_tag",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"tag\": \"corona\",\n\t\"conn_name\": \"ikrams3\",\n\t\"file\": \"ChinaWorries.pdf\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "5134fccb-9738-4af8-b175-6ad0087e7e3f",
+					"name": "Delete Tag",
+					"originalRequest": {
+						"url": "http://localhost/delete_tag",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"tag\": \"corona\",\n\t\"conn_name\": \"ikrams3\",\n\t\"file\": \"ChinaWorries.pdf\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "27"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 27 Feb 2020 10:29:28 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": \"Tag deleted\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete Automated Tag",
+			"request": {
+				"url": "http://localhost/delete_automated_tag",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"tag\": \"work\",\n\t\"conn_name\": \"ikrams3\",\n\t\"file\": \"ChinaWorries.pdf\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "a380a343-b660-4f37-b5b5-a406e4d54ef0",
+					"name": "Delete Tag",
+					"originalRequest": {
+						"url": "http://localhost/delete_tag",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"tag\": \"corona\",\n\t\"conn_name\": \"ikrams3\",\n\t\"file\": \"ChinaWorries.pdf\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "27"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 27 Feb 2020 10:29:28 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"res\": \"Tag deleted\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Graph",
+			"request": {
+				"url": "http://localhost/get_graph",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"description": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"conn_name\": \"ikrams3\"\n}"
+				},
+				"description": ""
+			},
+			"response": [
+				{
+					"id": "5a6c04c7-99e9-4ff8-9d9e-5b9cc035cbbf",
+					"name": "Get Graph",
+					"originalRequest": {
+						"url": "http://localhost/get_graph",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"description": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"conn_name\": \"ikrams3\"\n}"
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "430"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/1.0.0 Python/3.7.5"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 29 Feb 2020 07:18:04 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"edges\": [\n        {\n            \"from\": 0,\n            \"id\": 1,\n            \"label\": \"business\",\n            \"to\": 1\n        },\n        {\n            \"from\": 1,\n            \"id\": 1,\n            \"label\": \"Trump\",\n            \"to\": 2\n        }\n    ],\n    \"nodes\": [\n        {\n            \"id\": 1,\n            \"label\": \"ChinaWorries.pdf\"\n        },\n        {\n            \"id\": 2,\n            \"label\": \"Trump's high approval rating .docx\"\n        },\n        {\n            \"id\": 3,\n            \"label\": \"US India Trade Deal.txt\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Fetch Tags",
+			"request": {
+				"url": "http://localhost/fetch_tags",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "Generated from a curl request: \ncurl --location --request POST 'http://localhost:5001/fetch_tags' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{\n\t\\\"name\\\": \\\"CNBC News\\\"\n}'"
+			},
+			"response": []
+		}
+	]
+}
